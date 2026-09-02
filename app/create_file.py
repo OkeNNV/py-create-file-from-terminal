@@ -1,21 +1,34 @@
-import argparse
 import datetime
 import os
-
+import sys
 
 def create_file() -> None:
-    argument_parser = argparse.ArgumentParser()
-    argument_parser.add_argument("-d", nargs="+")
-    argument_parser.add_argument("-f")
-    parsed_args = argument_parser.parse_args()
+    args = sys.argv[1:]
+    dir_path = []
+    file_name = None
 
-    if parsed_args.d:
-        os.makedirs(os.path.join(*parsed_args.d), exist_ok=True)
+    i = 0
+    while i < len(args):
+        if args[i] == "-d":
+            i += 1
+            while i < len(args) and not args[i].startswith("-"):
+                dir_path.append(args[i])
+                i += 1
+        elif args[i] == "-f":
+            i += 1
+            if i < len(args):
+                file_name = args[i]
+                i += 1
+        else:
+            i += 1
 
-    if parsed_args.f:
-        target_file_path = parsed_args.f
-        if parsed_args.d:
-            target_file_path = os.path.join(*parsed_args.d, target_file_path)
+    if dir_path:
+        os.makedirs(os.path.join(*dir_path), exist_ok=True)
+
+    if file_name:
+        target_file_path = file_name
+        if dir_path:
+            target_file_path = os.path.join(*dir_path, target_file_path)
         write_lines(target_file_path)
 
 
