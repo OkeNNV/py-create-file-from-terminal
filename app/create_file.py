@@ -2,6 +2,7 @@ import datetime
 import os
 import sys
 
+
 def create_file() -> None:
     args = sys.argv[1:]
     dir_path = []
